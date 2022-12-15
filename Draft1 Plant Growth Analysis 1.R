@@ -25,16 +25,17 @@ Basic.Visualizing<-function(dataset){
   data<-dataset
   print(summary(data))
   glimpse(data)
-  p<- data %>% ggplot(mapping=aes(x = age, y = circumference, colour = Tree))+
+  p<- data %>% ggplot(mapping=aes(x = age, y = circumference, colour = Tree, text = paste("ID: Tree #", Tree)))+
     geom_point(alpha = 0.6, size = 1.8)+
     geom_line(alpha = 0.6)+
     geom_abline(intercept = 17.39, slope = 0.1068)+#taken from a linear model
     labs(title = "Circumferences of Orange Trees at different ages", x="Age(days)", y="Circumference(cm)")
-  print(p)
+ p.interactive<-ggplotly(p, tooltips = c("x","y", "text"))
+ print(p.interactive)
  p2<-pairs(data[-1,])
  print(paste(" Pairwise comparisons of the variables are as follows:", p2))
  p3<-cor(data$circumference, data$age)
- print(paste("The correlation bwteen age and circumference is:", p3))
+ print(paste("The correlation bewteen age and circumference is:", p3))
 }
 
 #Need to see whats happening here
@@ -218,14 +219,12 @@ Other.Visualizations<-function(dataset){
 #Load packages
 library(tidyverse)
 library(ggpubr)
-library(gganimate)
 library(lubridate)
-library(gifski)
-
-#library(readxl)
+library(plotly)
+library(readxl)
 
 #This is the actual thing
-dataset<-Orange
+#dataset<-Orange
 #dataset <- read_excel(NULL) This will be where i bring in the seaweed data eventually
 dataset<-Clean.and.Analyze(dataset)
 Basic.Visualizing(dataset)
