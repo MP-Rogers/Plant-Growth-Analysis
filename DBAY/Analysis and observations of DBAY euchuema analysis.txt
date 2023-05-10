@@ -1,0 +1,23 @@
+May 5, 2023 observations
+
+[1] "The mean growth rate is to be 6.0618  grams per day + or - 5.2963"
+[1] "The mean percentage growth rate is to be 5.8711  % per day + or - 3.5218"
+[1] "The estimated mean time to double in size is  12  days(to the nearest day)"
+
+From graph of mass against time
+	aside from the 2 samples with noted ice ice breakage on april 26, all sampls grew in mass
+	Even ice ice samples grow to above their initial weight by May 3
+	Most samples seem to be growing faster in mass  btw april 26 and may 5
+	
+From mean absolute growth rate  against time
+	Most around 6g per day as of may 6
+	Ranges from (1.4% -12%) april 26 to (22%-0.7%) may 3
+	Most clustered around the 5g per day mark
+	
+From graph of percentage growth rate against time
+	percentages are a lot tighter than absolute mass growth rates (2% - 9% per day)
+	2 -ve outliers from ice ice breakage
+	even outliers fall close to the cluster of % by may 3
+	
+_______________________________________________
+May 10, 2023 Data observations
