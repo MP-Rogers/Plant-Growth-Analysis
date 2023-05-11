@@ -223,8 +223,17 @@ Method.Test<-function(dataset){
 }
 
 Possible.Production.Hectare<-function(dataset){
-  
-}
+  area.cultivated<-readline(prompt = "How much areas were cultivated in m^2:")
+  area.cultivated<-as.double(area.cultivated)
+  kg.produced<-readline(prompt = "How many kg were produced on this area:")
+  kg.produced<-as.double(area.cultivated)
+  #area.cultivated<-2
+  #kg.produced<-10
+  mass.per.metre.sq<-kg.produced/area.cultivated
+  mass.per.hectare<-1e4*mass.per.metre.sq
+  print(paste("if growth continues and conditions are constant, this area can support ",mass.per.hectare ,  "kg per hectare"))
+
+  }
 
 #Load packages
 library(tidyverse)
@@ -244,6 +253,8 @@ Basic.Visualizing(dataset)
 dataset<-Calc.Doubling.Rate(dataset)
 Method.Test(dataset)
 Other.Visualizations(dataset)
+
+Possible.Production.Hectare(dataset)
 
 
 
