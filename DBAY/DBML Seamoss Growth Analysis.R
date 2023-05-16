@@ -253,7 +253,6 @@ Basic.Visualizing(dataset)
 dataset<-Calc.Doubling.Rate(dataset)
 Method.Test(dataset)
 Other.Visualizations(dataset)
-
 Possible.Production.Hectare(dataset)
 
 
