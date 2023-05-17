@@ -1,18 +1,17 @@
-###
+### Matthew-Pierre Rogers
 #This version of the analysis has names changed to accommodate the Variables in the "Seaweed Data" sheet
-#Began Editting for Seaweed Data Nov 9, 2022
+#Began Editing for Seaweed Data Nov 9, 2022; re strted April 2023
+
+#TO DO
 #Add an aesthetic for different species
-#First round of changes done on "Basic.Visualizing", "Clean.and.Analyze", "Curve.Fitting", and "Calc.Doubling.Rate"
-
-
 #Add in projections using current growth rates
 #Possible Correlations to water conditions
 #Tidy up aesthetics
-#Add in projected production per hectare
+
 #Notes
 
 
-
+#-----------------------------------------------------------------
 
 #Assess the data to see if it is missing anything and reveal the formatting
 Clean.and.Analyze<-function(dataset){
@@ -24,6 +23,7 @@ Clean.and.Analyze<-function(dataset){
   dataset$Identifier<-as.factor(dataset$Identifier)
   dataset$Method<-as.factor(dataset$Method)
   dataset$Day<-as.Date(dataset$Day, format= "%d/%m/%Y")
+  dataset$Mass<-dataset$Mass-5 #correct for the tag weight
   data<-dataset
   glimpse(data)
   #full.record<-complete.cases(data)
@@ -41,9 +41,26 @@ Basic.Visualizing<-function(dataset){
     geom_line(alpha = 0.6)+
     #geom_abline(intercept = 17.39, slope = 0.1068)+#taken from a linear model
     #Maybe add an aesthetic for species
-    labs(title = "Mass of Seaweed Samples at Different Days", x="Day", y="Mass(grams)")
+    labs(title = "Mass of Seaweed Samples at Different Days", x="Day", y="Mass(grams)")+
+    theme(plot.title = element_text(hjust = 0.5))
   p.interactive<-ggplotly(p, tooltips = c("x","y", "text"))
   print(p.interactive)
+#not including right now
+  d2<-data |> group_by(Day) |> mutate (Day = as.factor(Day))
+  d2<- d2 |> ggplot(mapping = aes(x= Day, y = Mass))+
+    geom_violin(fill = "green")+
+    geom_jitter(alpha = 0.8, colour = "grey")+
+    labs(title="Violinployplot of mass at each day")+
+    theme(plot.title = element_text(hjust = 0.5))
+  #print(d2)
+    
+  d2<-data |> group_by(Day) |> mutate (Day = as.factor(Day))
+  d2<- d2 |> ggplot(mapping = aes(x= Day, y = Mass))+
+    geom_boxplot(fill = "green")+
+    #geom_jitter(alpha = 0.8, colour = "grey")+
+    labs(title="Boxplot of mass at each day")+
+    theme(plot.title = element_text(hjust = 0.5))
+  print(d2)
   #numeric.data<-data |> select_if(is.numeric)
   #p2<-pairs(numeric.data)
   #print(paste(" Pairwise comparisons of the variables are as follows:", p2))
@@ -191,16 +208,19 @@ Other.Visualizations<-function(dataset){
     geom_point(alpha = 0.8, size = 2)+
     geom_line(alpha = 0.8)+
     labs(title="Total mass of sampled seaweed over time")+
-    ylab("Mass of all seaweed sampled (grams)")
-  graph.4<-ggplotly(graph.4)   
+    ylab("Mass of all seaweed sampled (grams)")+
+    theme(plot.title = element_text(hjust = 0.5))
+  graph.4<-ggplotly(graph.4)
   print(graph.4)
   
   graph.5<-ggplot(d2, mapping=aes(x = Day, y = mean.mass))+
     geom_point(alpha = 0.8, size = 2)+
     geom_line(alpha = 0.8)+
     labs(title="Mean mass of sampled seaweed over time")+
-    ylab ("Mean mass of all seaweed sampled (grams)")
-  graph.5<-ggplotly(graph.5)
+    ylab ("Mean mass of all seaweed sampled (grams)")+
+    theme(plot.title = element_text(hjust = 0.5))
+  graph.5<-ggplotly(graph.5)+
+    
   print(graph.5)
   return(data)
   
@@ -235,25 +255,42 @@ Possible.Production.Hectare<-function(dataset){
 
   }
 
+Potential.Revenue<-function(dataset){
+  data<-dataset
+  d<- data |> group_by(Day) |> mutate(total.mass = sum(Mass)) |> mutate(mean.mass = mean(Mass))
+  price.kg <- 2000*2.2 #can update
+  d<- d |> mutate(revenue = price.kg*(total.mass/1000))
+  rev.plot<- d|> ggplot(mapping = aes(x = Day, y = revenue))+
+    geom_point(alpha = 0.8, size = 2, colour = "#1A8922")+
+    geom_line(alpha = 0.8, colour = "#1A8922")+
+    labs(title = "Potential revenue from selling all samples", y = "JMD")+
+    scale_y_continuous(breaks = seq(0,max(d$revenue), 1000), labels = label_dollar())+
+    theme(plot.title = element_text(hjust=0.5))
+  print(rev.plot)
+  
+}
+
+#---------------------------------------------------------------------
 #Load packages
 library(tidyverse)
 library(ggpubr)
 library(lubridate)
 library(plotly)
 library(readxl)
+library(scales)
 
 #This is the actual thing
-#dataset<-Orange
-#dataset <- read_excel("Seaweed Data.xlsx",  sheet = "Growth Assesment 2.1") #This will be where i bring in the seaweed data eventually
 dataset<-read_excel("Seaweed Data.xlsx")
 dataset<-Clean.and.Analyze(dataset)
 Basic.Visualizing(dataset)
 #testing(dataset)
 #Curve.Fitting.Attempt(dataset)
 dataset<-Calc.Doubling.Rate(dataset)
+Potential.Revenue(dataset)
 Method.Test(dataset)
 Other.Visualizations(dataset)
-Possible.Production.Hectare(dataset)
+#Possible.Production.Hectare(dataset)
+#Potential.Revenue(dataset)
 
 
 

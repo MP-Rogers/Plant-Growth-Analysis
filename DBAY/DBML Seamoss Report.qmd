@@ -6,7 +6,7 @@ theme: journal
 editor: visual
 ---
 
-Last Edit: may 10, 2023
+Last Edit: may 16, 2023
 
 # Irish Moss Cultivation Project
 
@@ -22,21 +22,20 @@ At the same time, environmental degradation from development, climate change and
 
 ## Rationale
 
-+ Potential income earner
-+ Ease fishing pressure and let stuff recover
-+ More funding to marine park and sanctuaries
-+ Potential value added products
+-   Potential income earner
+-   Ease fishing pressure and let stuff recover
+-   More funding to marine park and sanctuaries
+-   Potential value added products
 
 ## Aims and Objectives
 
 There are several aims and objectives undertaken with this project:
 
-1. To attempt to grow commercially important seaweed species locally
-    1. To determine suitable conditions for growing Irish moss locally in Jamaica
-    1. To determine methods of cultivation which work best in a Jamaican context
-2. To quantify the mean growth rate of the seaweed
-3. To determine the potential profitability of cultivating seaweed in Jamaica
-
+1.  To attempt to grow commercially important seaweed species locally
+    1.  To determine suitable conditions for growing Irish moss locally in Jamaica
+    2.  To determine methods of cultivation which work best in a Jamaican context
+2.  To quantify the mean growth rate of the seaweed
+3.  To determine the potential profitability of cultivating seaweed in Jamaica
 
 ## Methods
 
@@ -76,8 +75,6 @@ names<-colnames(dataset)
   #glimpse(data)
 ```
 
-
-
 ```{r}
 #| warning: false
 #| echo: false
@@ -95,22 +92,16 @@ names<-colnames(dataset)
   p.interactive
 ```
 
-
 The graphs go here. Clearly, I'll need to mention growth, but i have graphs and math for that
-
-
 
 I'll need to mention non quantitative observations too:
 
-1. Ice-Ice
-1. Cleaning
-1. Fragmenting/Reserve Stock
-1. Colour changes
-
-
+1.  Ice-Ice
+2.  Cleaning
+3.  Fragmenting/Reserve Stock
+4.  Colour changes
 
 ### Running Code
-
 
 You can add options to executable code like this
 
@@ -125,9 +116,9 @@ The `echo: false` option disables the printing of code (only output is displayed
 
 ## Further Recommendations for Future study
 
-+ More Sites
-+ More Species
-+ More Samples
+-   More Sites
+-   More Species
+-   More Samples
 
 ## References
 
