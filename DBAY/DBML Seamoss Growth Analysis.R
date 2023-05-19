@@ -45,6 +45,7 @@ Basic.Visualizing<-function(dataset){
     theme(plot.title = element_text(hjust = 0.5))
   p.interactive<-ggplotly(p, tooltips = c("x","y", "text"))
   print(p.interactive)
+  
 #not including right now
   d2<-data |> group_by(Day) |> mutate (Day = as.factor(Day))
   d2<- d2 |> ggplot(mapping = aes(x= Day, y = Mass))+
@@ -57,7 +58,7 @@ Basic.Visualizing<-function(dataset){
   d2<-data |> group_by(Day) |> mutate (Day = as.factor(Day))
   d2<- d2 |> ggplot(mapping = aes(x= Day, y = Mass))+
     geom_boxplot(fill = "green")+
-    #geom_jitter(alpha = 0.8, colour = "grey")+
+    geom_jitter(alpha = 0.8, colour = "grey")+
     labs(title="Boxplot of mass at each day")+
     theme(plot.title = element_text(hjust = 0.5))
   print(d2)
@@ -219,7 +220,7 @@ Other.Visualizations<-function(dataset){
     labs(title="Mean mass of sampled seaweed over time")+
     ylab ("Mean mass of all seaweed sampled (grams)")+
     theme(plot.title = element_text(hjust = 0.5))
-  graph.5<-ggplotly(graph.5)+
+  graph.5<-ggplotly(graph.5)
     
   print(graph.5)
   return(data)
@@ -264,8 +265,10 @@ Potential.Revenue<-function(dataset){
     geom_point(alpha = 0.8, size = 2, colour = "#1A8922")+
     geom_line(alpha = 0.8, colour = "#1A8922")+
     labs(title = "Potential revenue from selling all samples", y = "JMD")+
-    scale_y_continuous(breaks = seq(0,max(d$revenue), 1000), labels = label_dollar())+
+    scale_y_continuous(labels = label_dollar())+
     theme(plot.title = element_text(hjust=0.5))
+  #breaks = seq(0,max(d$revenue), 1000)
+  rev.plot<-ggplotly(rev.plot)
   print(rev.plot)
   
 }
@@ -286,11 +289,11 @@ Basic.Visualizing(dataset)
 #testing(dataset)
 #Curve.Fitting.Attempt(dataset)
 dataset<-Calc.Doubling.Rate(dataset)
-Potential.Revenue(dataset)
+#Potential.Revenue(dataset)
 Method.Test(dataset)
 Other.Visualizations(dataset)
 #Possible.Production.Hectare(dataset)
-#Potential.Revenue(dataset)
+
 
 
 
