@@ -36,13 +36,15 @@ Basic.Visualizing<-function(dataset){
   data<-dataset
   print(summary(data))
   #glimpse(data)
+  
   p<- data %>% ggplot(mapping=aes(x = Day, y = Mass, colour = Identifier))+
-    geom_point(alpha = 0.6, size = 1.8, shape = data$Method)+
+    geom_point(alpha = 0.6, size = 1.8)+
     geom_line(alpha = 0.6)+
+    geom_smooth(method=lm, se=FALSE, colour ="black", linetype = "dashed")+
     #geom_abline(intercept = 17.39, slope = 0.1068)+#taken from a linear model
     #Maybe add an aesthetic for species
     labs(title = "Mass of Seaweed Samples at Different Days", x="Day", y="Mass(grams)")+
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5),legend.position = "none")
   p.interactive<-ggplotly(p, tooltips = c("x","y", "text"))
   print(p.interactive)
   
@@ -274,6 +276,8 @@ Potential.Revenue<-function(dataset){
 }
 
 #---------------------------------------------------------------------
+
+
 #Load packages
 library(tidyverse)
 library(ggpubr)

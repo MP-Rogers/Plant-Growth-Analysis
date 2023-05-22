@@ -1,0 +1,314 @@
+---
+title: "DBML Irish Moss Cultivation Project Science Draft 1.0"
+author: "Matthew-Pierre Rogers"
+format: html
+theme: journal
+engine: knitr
+editor: visual
+toc: true
+prefer-html: true
+---
+
+Last Edit: may 19, 2023
+
+# Irish Moss Cultivation Project
+
+![Matthew-Pierre Rogers with a line of Eucheuma cotonii](Images/May%2017,%202023/WhatsApp%20Image%202023-05-17%20at%2010.08.10%20AM.jpeg){fig-align="center" width="346"}
+
+This project serves as a preliminary attempt to begin the cultivation of Irish Moss at the Discovery Bay Marine Lab. This document outlines some of the rationale, methods and procedures and results undertaken during the course of this project.
+
+## Background
+
+Jamaica has been noted to have some of the most overfished waters in the Caribbean. At the same time the territory has ***THIS MANY*** fisherfolk who are experiencing less income as a result of the lower quantities of smaller lower quality fish which are caught.
+
+At the same time, environmental degradation from development, climate change and the ecosystem effects of overfishing further reduce the sustainability and productivity of the fisheries sector.
+
+## Introduction
+
+Jamaica has a tradition of utilizing seaweeds in some traditional foods and beverages. Many species collectively called "Sea moss" and "Irish Moss" are consumed locally. As with many sales of agricultural/natural products, many sales occur informally.
+
+However effectively all the seamoss sold locally is harvested wild by divers and fisher folk. Despite the high value of the product, (Over the course of the project, prices per pound ranged from \$2000 to \$5000 jmd), there is no cultivation of the seamoss, which can lead to depletion of natural stocks.
+
+The project seeks to explore the potential viability of cultivating irish moss locally. Specifically this project involves a small scale cultivation of **Euchuema cotonii** using different methods.
+
+## Rationale
+
+-   Potential income earner
+-   Ease fishing pressure and let stuff recover
+-   More funding to marine park and sanctuaries
+-   Potential value added products
+
+## Aims and Objectives
+
+There are several aims and objectives undertaken with this project:
+
+1.  To attempt to grow commercially important seaweed species locally
+    1.  To determine suitable conditions for growing Irish moss locally in Jamaica
+    2.  To determine methods of cultivation which work best in a Jamaican context
+2.  To quantify the mean growth rate of the seaweed
+3.  To determine the potential profitability of cultivating seaweed in Jamaica
+
+## Methods
+
+For this project, *Eucheuma cotonii*, one of many species of seaweed commonly known as irish moss, was grown using two methods in the Discovery Bay Area. These methods were a Floating Raft Method and an Off-Bottom Method.Both cultivation set ups same area to cultivate the *Eucheuma* over a six week period as suggested by the literature.
+
+The Off-Bottom method was adapted from previous efforts by the Discovery Bay Marine Lab to cultivate *Eucheuma*. Two pieces of iron rebar were driven into the sandy substrate using a combination of a hammer and body weight. A rope was run between the two rebar posts by untwisting the rope and running the rebar through the gap. This was followed by tying the remaining length to further secure the rope.
+
+**IMAGE OF LINE**
+
+For the raft method, a small raft was constructed. This raft consisted of two metre long 3/4" PVC pipes capped with 3/4" PVC caps at the ends. four 2.5 metre 5mm polypropene ropes were drilled through to ropes. Buoys were used to keep the raft afloat, but bottle floats should also be a viable alternative. Cement blocks were used to anchor the whole structure, one at each corner of the raft (although adjacent Rafts could share anchors)
+
+**IMAGE OF RAFT**
+
+![](Images/April%204,%202023%20(initial%20raft%20day)/Me%20with%20raft%20by%20dock.jpeg){fig-align="center" width="331"}
+
+For both methods, samples were labelled with numbered aluminum tags. These tags were threaded with construction cord. Where possible, the construction cord and tag were attached to a 10cm section of rope. The rope was untwisted and then the and end of the cord was run through the opening and tied. the rope was then retwisted. The ends of the rope were burned to reduce fraying. The length of these attachment ropes was found to be 5g(most of which is the aluminium tag itself.)
+
+Where materials ran low, construction cord was directly tied into the rope of the cultivation line.
+
+![Image of attachment rope which is twisted into the main cultivation line, with a measurement tag attached](Images/Attechment%20Rope%20with%20Tag.jpeg){fig-align="center" width="316"}
+
+Once a week the samples were removed from the water and carried back in a slotted crate. The crate was allowed to drain for a minute and then carried to the lab out of direct sun and wind. The samples were weighed on a balance/scale and their masses recorded. For some samples, images were taken.
+
+![Image of Seamoss Sample being measured](Images/Sample%20on%20Scale.jpeg){fig-align="center" width="324"}
+
+The seamoss was then returned to the crate and reattached to the cultivation line the same way.
+
+**The attachment ropes are intended for measuring the weight, but make removing seamoss far easier.**
+
+## Observations and Results
+
+
+
+```{r}
+#| label: Load Packages
+#| warning: false
+#| echo: false
+library(tidyverse)
+library(ggpubr)
+library(lubridate)
+library(plotly)
+library(readxl)
+library(scales)
+dataset <- read_excel("Seaweed Data.xlsx")
+```
+
+```{r}
+#| label: Clean and Tidy Data
+#| warning: false
+#| echo: false
+names<-colnames(dataset)
+  names[4]<-"Mass"
+  names[5]<-"Day"
+  #names[5]<-"Length"
+  colnames(dataset)<-names
+  dataset$Identifier<-as.factor(dataset$Identifier)
+  dataset$Method<-as.factor(dataset$Method)
+  dataset$Day<-as.Date(dataset$Day, format= "%d/%m/%Y")
+  #data<-dataset
+  #glimpse(data)
+```
+
+```{r}
+#| label: Change in Mass of all Samples over time
+#| warning: false
+#| echo: false
+#| fig-cap: Figure 1 showing change in mass of seaweed over time
+  data<-dataset
+  #print(summary(data))
+  #glimpse(data)
+  data<-data |> group_by(Day) |> mutate (mean.mass = mean(Mass))
+  p<- data %>% ggplot(mapping=aes(x = Day, y = Mass, colour = Identifier))+
+    geom_point(alpha = 0.6, size = 1.8)+
+    geom_line(alpha = 0.6)+
+    geom_smooth(method=lm, se=FALSE, colour ="black", linetype = "dashed")+
+    #geom_abline(intercept = 17.39, slope = 0.1068)+#taken from a linear model
+    #Maybe add an aesthetic for species
+    labs(title = "Mass of Seaweed Samples at Different Days", x="Day", y="Mass(grams)")+
+    theme(plot.title = element_text(hjust = 0.5),legend.position = "none")
+  p.interactive<-ggplotly(p, tooltips = c("x","y", "text"))
+  print(p)
+  #p.interactive
+```
+
+```{r}
+#| echo: false
+#| label: Boxplot of mass over time
+#| warning: false
+#| fig-cap: Figure 2 showing change in mass of sampled seaweed over time
+data<-dataset
+d2<-data |> group_by(Day) |> mutate (Day = as.factor(Day))
+  d2<- d2 |> ggplot(mapping = aes(x= Day, y = Mass))+
+    geom_boxplot(fill = "green")+
+    geom_jitter(alpha = 0.8, colour = "grey")+
+    labs(title="Boxplot of mass at each day")+
+    theme(plot.title = element_text(hjust = 0.5))
+  print(d2)
+```
+
+Below are the results of the mean growth of the *Euchuema* grown over the period:
+
+```{r}
+#| echo: false
+#| warning: false
+#| label: Calculating Mean growth and doubling time
+
+  data<- dataset %>% group_by(Identifier) %>% mutate(prev.Day = lag(Day, 1, default = NA))
+  
+  data<- data %>% mutate(prev.Mass = lag(Mass, 1, default = NA))
+  data<- data %>% mutate(k = (Mass - prev.Mass)/as.double.difftime(Day - prev.Day, unit = "days"))
+  data<- data %>% mutate(percent.k = (k/prev.Mass)*100)
+  
+  # work with growth in percentage terms
+  perc.growth.rates<-na.omit(data$percent.k)
+  perc.growth.rates<-perc.growth.rates[is.finite(perc.growth.rates)]
+  avg.percent.growth<-round(mean(perc.growth.rates),4)
+  sd.percent.growth<-round(sd(perc.growth.rates),4)
+  
+  
+  #work with growth in absolute terms
+  growth.rates<-na.omit(data$k)
+  growth.rates<-growth.rates[is.finite(growth.rates)]
+  avg.growth.rate<-round(mean(growth.rates),4)
+  sd.growth.rate<-round(sd(growth.rates),4)
+  
+  
+  doubling.time<-(log(2)/log((1+(avg.percent.growth/100))))# this eqn might need to be modified.
+  doubling.time<-round(doubling.time)
+  #where % k is used in calculating doubling time, it must be expressed as a decimal again, divide by 100
+  
+  print(paste("The mean growth rate is to be", avg.growth.rate, " grams per day + or -", sd.growth.rate))
+  print(paste("The mean percentage growth rate is to be", avg.percent.growth, " % per day + or -", sd.percent.growth))
+  print(paste("The estimated mean time to double in size is ", doubling.time, " days(to the nearest day)"))
+```
+
+```{r}
+#| echo: false
+#| fig-cap: Figure 3 Showing mass change of individual samples over time
+#| warning: false
+#| label: Absolute growth per day
+graph.1<-ggplot(data, mapping = aes(x = Day, y = k, colour = Identifier))+
+    geom_point(alpha = 0.8, size = 2)+
+    geom_line(alpha = 0.8)+
+    geom_hline(yintercept = avg.growth.rate, linetype = "dashed", size = 1)+
+    #geom_ribbon(alpha = 0.1, aes(ymin=(avg.growth.rate-sd.growth.rate), ymax=(avg.growth.rate+sd.growth.rate)))+ #shows std deviation
+    labs(x="Days", y = "Growth Rate(k), g/day", title="Growth Rate showing mean growth rate")+
+    theme(plot.title = element_text(hjust = 0.5))
+  #graph.1<-ggplotly(graph.1)
+  print(graph.1)
+```
+
+When quantified, the absolute growth per day is scattered. Trends are far easier to see when the percentage growth rate is analyzed as in figure *4* below.
+
+```{r}
+#| echo: false
+#| fig-cap: Figure 4 Showing percentage mass change over time
+#| warning: false
+#| label:  Percentage growth rate plot
+graph.3<-ggplot(data, mapping = aes(x = Day, y = percent.k, colour = Identifier))+
+    geom_point(alpha = 0.8, size = 2)+
+    geom_line(alpha = 0.8)+
+    labs(x="Days", y = "percentage Growth Rate(k)", title="Percentage Growth Rate showing mean")+
+    geom_hline(yintercept = avg.percent.growth, linetype = "dashed", size = 1)+
+    #geom_ribbon(alpha =0.1, aes(ymax=avg.percent.growth+sd.percent.growth, ymin = avg.percent.growth-sd.percent.growth))+#shows std deviation
+    theme(plot.title = element_text(hjust = 0.5))
+  #graph.3<-ggplotly(graph.3)
+ print(graph.3)
+
+```
+
+```{r}
+#| echo: false
+#| fig-cap: Figure 5 Showing total mass of all samples over time
+#| warning: false
+#| label: Total Mass Plot
+ d2<- data |> group_by(Day) |> mutate(total.mass = sum(Mass)) |> mutate(mean.mass = mean(Mass))
+  graph.4<-ggplot(d2, mapping=aes(x = Day, y = total.mass))+
+    geom_point(alpha = 0.8, size = 2)+
+    geom_line(alpha = 0.8)+
+    labs(title="Total mass of sampled seaweed over time")+
+    ylab("Mass of all seaweed sampled (grams)")+
+    theme(plot.title = element_text(hjust = 0.5))
+  #graph.4<-ggplotly(graph.4)
+  print(graph.4)
+```
+
+```{r}
+#| echo: false
+#| fig-cap: Figure 6 Showing mean mass of all samples over time
+#| warning: false
+#| label: Mean Mass Plot
+graph.5<-ggplot(d2, mapping=aes(x = Day, y = mean.mass))+
+    geom_point(alpha = 0.8, size = 2)+
+    geom_line(alpha = 0.8)+
+    labs(title="Mean mass of sampled seaweed over time")+
+    ylab ("Mean mass of all seaweed sampled (grams)")+
+    theme(plot.title = element_text(hjust = 0.5))
+  #graph.5<-ggplotly(graph.5)
+  print(graph.5)
+```
+
+Mean and total mass change over time show essentially the story. The samples essentially tripled in mass in 5 weeks. The mean mass of all samples increased 296%, while the total mass of all samples increased 316% over 5 weeks.
+
+Assuming a number of values the researcher heard informally as selling prices per unit wieght. Prices ranged from \$2000 to \$5000 so an intermediate value of \$3500 was used in calculating the potential revenue
+
+```{r}
+#| echo: false
+#| fig-cap: Figure 6 Showing potential revenue as seaweed is sold over time
+#| warning: false
+#| label: Revenue Plot
+
+ data<-dataset
+  d<- data |> group_by(Day) |> mutate(total.mass = sum(Mass)) |> mutate(mean.mass = mean(Mass))
+  price.kg <- 3500*2.2 #can update, using a mid range price
+  d<- d |> mutate(revenue = price.kg*(total.mass/1000))
+  rev.plot<- d|> ggplot(mapping = aes(x = Day, y = revenue))+
+    geom_point(alpha = 0.8, size = 2, colour = "#1A8922")+
+    geom_line(alpha = 0.8, colour = "#1A8922")+
+    labs(title = "Potential revenue from selling all samples", y = "JMD")+
+    scale_y_continuous(labels = label_dollar())+
+    theme(plot.title = element_text(hjust=0.5))
+  #breaks = seq(0,max(d$revenue), 1000)
+  #rev.plot<-ggplotly(rev.plot)
+  print(rev.plot)
+```
+
+Throughout the process of cultivating the Seamoss, several observations were made by the researcher.
+
+1.  Ice-Ice
+2.  Cleaning + Fouling
+3.  Fragmenting/Reserve Stock
+4.  Colour changes
+
+## Discussion
+
+-   Growth rates
+-   Maintenance
+-   Good Practices
+-   Potential revenue
+-   Potential Material substitutes
+
+Potential issues that need to be solved:
+
+-   Larceny
+-   Site Selection
+-   Market
+
+## Further Recommendations for Future study
+
+-   More Sites
+-   More Species
+-   More Samples/Replicates
+-   New Method? (Net)
+-   Samples more uniform in size
+-   More anchors for raft
+-   Dont drill raft
+-   
+
+## References
+
+Canari manual
+
+## Acknowledgements
+
+I must express my immense gratitude to the Discovery Bay Marine Lab. Without the generous allowance for the use of lab space, and starting stock this project could not have taken place. Special thanks to Shanna Lee Thomas, Chief Scientific Officer at the Discovery Bay Marine Lab for her assistance, guidance and giving the freedom for this project
